@@ -1,0 +1,12 @@
+# ide
+.vscode/**
+.idea/**
+
+# py
+__pycache__
+
+# 0to100
+0to100-latest/**
+runme.sh
+setup.sh
+map.yaml
