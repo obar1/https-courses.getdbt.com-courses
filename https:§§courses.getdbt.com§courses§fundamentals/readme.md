@@ -26,7 +26,7 @@ community
 channel in slack ` learn on demand` channel
 
 
-## faq
+### faq
 
 5 hours to complete the course
 you get dbt fundamental badge
@@ -334,7 +334,7 @@ TODO:
 
 ### Review
 
--  models are select from source data 
+- models are select from source data 
 - dbt run materialize the actual models into the target dwh
 - use config and materialized directives
 - use full-refresh to refresh the structure
@@ -351,10 +351,107 @@ folder org
 ![](2022-08-13-12-07-13.png)
 
 
+
+## Sources (12 minutes + exercise)
+
+### Learning Objectives
+Explain the purpose of sources in dbt.
+Configure and select from sources in your data warehouse.
+View sources in the lineage graph.
+Check the last time sources were updated and raise warnings if stale.
+
+### What are sources?
+![](2022-08-14-05-37-20.png)
+use of 
+![](2022-08-14-05-37-35.png)
+def metadata in yml and use the source macro
+ex
+![](2022-08-14-05-38-11.png)
+sources show up in lineage
+![](2022-08-14-05-38-44.png)
+
+### Configure and select from sources
+
+add metadata in yml
+![](2022-08-14-05-53-11.png)
+
+db schema tables
+
+refactor to use it 
+![](2022-08-14-05-53-53.png)
+
+to 
+![](2022-08-14-05-54-26.png)
+
+got it now in lineage graph too
+![](2022-08-14-05-55-33.png)
+
+### Source freshness
+
+we have a timestanp from etl framework as 
+![](2022-08-14-05-59-10.png)
+
+use in the yml as 
+![](2022-08-14-05-59-34.png)
+
+```yaml
+version: 2
+
+sources:
+  - name: jaffle_shop
+    database: raw
+    schema: jaffle_shop
+    tables:
+      - name: customers
+      - name: orders
+        loaded_at_field: _etl_loaded_at
+        freshness:
+          warn_after: {count: 12, period: hour}
+          error_after: {count: 24, period: hour}
+```
+
+use with `dbt source freshness`
+
+### Practice
+
+TODO:
+
+### Exemplar
+
+TODO:
+
+### Review
+
+Sources
+Sources represent the raw data that is loaded into the data warehouse.
+We can reference tables in our models with an explicit table name (raw.jaffle_shop.customers).
+However, setting up Sources in dbt and referring to them with the source function enables a few important tools.
+Multiple tables from a single source can be configured in one place.
+Sources are easily identified as green nodes in the Lineage Graph.
+You can use dbt source freshness to check the freshness of raw tables.
+Configuring sources
+Sources are configured in YML files in the models directory.
+
+Source function
+The ref function is used to build dependencies between models.
+Similarly, the source function is used to build the dependency of one model to a source.
+Given the source configuration above, the snippet {{ source('jaffle_shop','customers') }} in a model file will compile to raw.jaffle_shop.customers.
+
+
+Source freshness
+Freshness thresholds can be set in the YML file where sources are configured. For each table, the keys loaded_at_field and freshness must be configured.
+
+A threshold can be configured for giving a warning and an error with the keys warn_after and error_after.
+The freshness of sources can then be determined with the command dbt source freshness.
+
+
+
+## Tests (17 minutes + exercise)
+
+
 ===
-Sources (12 minutes + exercise)
-Tests (17 minutes + exercise)
-Documentation (16 minutes + exercise)
-Deployment (11 minutes + exercise)
-Survey and Next Steps (30 minutes)
+
+## Documentation (16 minutes + exercise)
+## Deployment (11 minutes + exercise)
+## Survey and Next Steps (30 minutes)
 
