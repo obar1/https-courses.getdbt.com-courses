@@ -103,3 +103,7 @@ select * from `dbt-tutorial.jaffle_shop.customers`
 ```
 dbt run
 ```
+
+check bq
+
+![](2022-08-23-15-13-25.png)
